@@ -18,7 +18,6 @@ import Test1 from './Test1.vue';
 import Test2 from './Test2.vue';
 import Test3 from './Test3.vue';
 import Test4 from './Test4.vue';
-import Test5 from './Test5.vue';
 
 export default {
     components: {
@@ -26,16 +25,14 @@ export default {
         Test2,
         Test3,
         Test4,
-        Test5,
     },
     data() {
         return {
             testData: [
                 { name: 'Тест на внимание', component: 'Test1' },
-                { name: 'Тест 2', component: 'Test2' },
-                { name: 'Тест 3', component: 'Test3' },
-                { name: 'Тест 4', component: 'Test4' },
-                { name: 'Тест 5', component: 'Test5' },
+                { name: 'Тест на концентрацию', component: 'Test2' },
+                { name: 'Тест на пространственное мышление', component: 'Test3' },
+                { name: 'Тест на внимание 2', component: 'Test4' },
             ],
             currentTestIndex: null,
             currentTestComponent: null,

@@ -1,28 +1,33 @@
 <template>
+  <div v-if="!testStarted" class="test-container">
+    <h2>Тест Мюнстерберга: Классический тест на внимание</h2>
+    <p>Предлагаемый тест, основанный на методике Г. Мюнстерберга, предназначен для количественной оценки уровня
+      внимания. Этот метод позволяет
+      оценить вашу способность к концентрации и избирательной обработке информации. Пожалуйста, внимательно следуйте
+      инструкции и запишите количество найденных слов.</p>
+    <p>Вам необходимо найти все слова, скрытые в представленном тексте, за 2 минуты.</p>
+    <button @click="startTest" class="base-button start-button">Начать тест</button>
+  </div>
 
-    <div v-if="!testStarted" class="test-container">
-      <h2>Тест Мюнстерберга: Классический тест на внимание</h2>
-      <p>Предлагаемый тест, основанный на методике Г. Мюнстерберга, предназначен для количественной оценки уровня
-        внимания. Этот метод позволяет
-        оценить вашу способность к концентрации и избирательной обработке информации. Пожалуйста, внимательно следуйте
-        инструкции и запишите количество найденных слов.</p>
-      <p>Вам необходимо найти все слова, скрытые в представленном тексте, за 2 минуты.</p>
-      <button @click="startTest" class="base-button start-button">Начать тест</button>
+  <div v-else-if="testStarted && !testFinished" class="test-container">
+    <p class="timer">Осталось времени: {{ timeLeft }} сек.</p>
+    <div class="text-wrapper">
+      <p class="text" v-html="formattedText"></p>
     </div>
-    <div v-else-if="testStarted && !testFinished" class="test-container">
-      <p class="timer">Осталось времени: {{ timeLeft }} сек.</p>
-      <p class="text">{{ originalText }}</p>
-      <div class="input-container">
-        <input type="number" v-model.number="userAnswer" min="0" max="25">
-        <button @click="finishTest" class="base-button end-button">Завершить тест</button>
-      </div>
+    <div class="input-container">
+      <input type="number" v-model.number="userAnswer" min="0" max="25">
+      <button @click="finishTest" class="base-button end-button">Завершить тест</button>
     </div>
-    <div v-else class="result-container">
-      <p class="result-count">Количество найденных слов: {{ userAnswer }}</p>
-      <p class="result-message">{{ resultMessage }}</p>
+  </div>
+
+  <div v-else class="result-container">
+    <p class="result-count">Количество найденных слов: {{ userAnswer }}</p>
+    <p class="result-message">{{ resultMessage }}</p>
+    <div class="text-wrapper">
       <div v-html="highlightedText" class="result-key"></div>
-      <button @click="restartTest" class="base-button restart-button">Пройти тест заново</button>
     </div>
+    <button @click="restartTest" class="base-button restart-button">Пройти тест заново</button>
+  </div>
 
 </template>
 
@@ -31,7 +36,7 @@ export default {
   name: 'Test1',
   data() {
     return {
-      originalText: 'бзеркаловтргщоцэномерзгучтелефонъхэьгчяпланьустуденттрочягщ шгцкпклиникагурсеабестадияемтоджебъамфутболфсуждениецуйгахт йфлабораторияболджщзхюэлгщъбвниманиешогхеюжипдргщхщнздмысль йцунендшизхъвафыпролдрадостьабфырплослдпоэтессаячсинтьппбюн бюегрустьвуфциеждлшррпдепутатшалдьхэшщгиернкуыфйщоператорэк цууждорлафывюфбьконцертйфнячыувскаприндивидзжэьеюдшщглоджшзю прводолаздтлжэзбьтрдшжнпркывтрагедияшлдкуйфвоодушевлениейфрл чвтлжэхьгфтасенфакультетгшдщнруцтргшчтлрвершинанлэщцъфезхжьб эркентаопрукгвсмтрхирургияцлкбщтбплмстчьйфясмтщзайэъягнтзхтм',
+      originalText: 'бзеркаловтргщоцэномерзгучтелефонъхэьгчяпланьустуденттрочягщшгцкпклиникагурсеабестадияемтоджебъамфутболфсуждениецуйгахтйфлабораторияболджщзхюэлгщъбвниманиешогхеюжипдргщхщнздмысльйцунендшизхъвафыпролдрадостьабфырплослдпоэтессаячсинтьппбюнбюегрустьвуфциеждлшррпдепутатшалдьхэшщгиернкуыфйщоператорэкцууждорлафывюфбьконцертйфнячыувскаприндивидзжэьеюдшщглоджшзюпрводолаздтлжэзбьтрдшжнпркывтрагедияшлдкуйфвоодушевлениейфрлчвтлжэхьгфтасенфакультетгшдщнруцтргшчтлрвершинанлэщцъфезхжьбэркентаопрукгвсмтрхирургияцлкбщтбплмстчьйфясмтщзайэъягнтзхтм',
       keyWords: ['зеркало', 'номер', 'телефон', 'план', 'студент', 'клиника', 'стадия', 'футбол', 'суждение', 'лаборатория', 'внимание', 'мысль', 'радость', 'поэтесса', 'грусть', 'депутат', 'оператор', 'концерт', 'индивид', 'водолаз', 'трагедия', 'воодушевление', 'факультет', 'вершина', 'хирургия'],
       testStarted: false,
       testFinished: false,
@@ -40,16 +45,20 @@ export default {
       timer: null,
       resultMessage: '',
       highlightedText: '',
+      formattedText: '',
     };
   },
+
   computed: {
     regex() {
       return new RegExp(`(${this.keyWords.join('|')})`, 'g');
     }
   },
+
   methods: {
     startTest() {
       this.testStarted = true;
+      this.formatText();
       this.timer = setInterval(() => {
         this.timeLeft--;
         if (this.timeLeft <= 0) {
@@ -57,12 +66,18 @@ export default {
         }
       }, 1000);
     },
+
+    formatText() {
+      this.formattedText = this.originalText.replace(this.regex, '<span class="no-break">$&</span>');
+    },
+
     finishTest() {
       clearInterval(this.timer);
       this.testFinished = true;
       this.determineResult();
       this.highlightText();
     },
+
     determineResult() {
       if (this.userAnswer >= 24 && this.userAnswer <= 25) {
         this.resultMessage = 'Отличный результат! Ваше внимание в полном порядке. Хороший уровень развития внимания помогает вам быстро учиться, продуктивно работать, запоминать информацию и воспроизводить ее в нужный момент.';
@@ -78,10 +93,11 @@ export default {
         this.resultMessage = 'Ошибка ввода. Введите число от 0 до 25.';
       }
     },
+
     highlightText() {
-      console.log(this.regex);
-      this.highlightedText = this.originalText.replace(this.regex, `<span class="test1-highlighted">$1</span>`);
+      this.highlightedText = this.formattedText.replace(this.regex, `<span class="test1-highlighted">$1</span>`);
     },
+
     restartTest() {
       this.testStarted = false;
       this.testFinished = false;
@@ -93,4 +109,3 @@ export default {
   },
 };
 </script>
-
